@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grafik Penjualan Tahunan</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 20px;
+      }
+      table {
+        margin: 20px auto;
+        border-collapse: collapse;
+        width: 80%;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #f4f4f4;
+      }
+      canvas {
+        margin: 20px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Laporan Penjualan Tahunan</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Bulan</th>
+          <th>2022</th>
+          <th>2023</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Januari</td>
+          <td>4017</td>
+          <td>2416</td>
+        </tr>
+        <tr>
+          <td>Februari</td>
+          <td>6135</td>
+          <td>4136</td>
+        </tr>
+        <tr>
+          <td>Maret</td>
+          <td>7091</td>
+          <td>7935</td>
+        </tr>
+        <tr>
+          <td>April</td>
+          <td>5841</td>
+          <td>8004</td>
+        </tr>
+        <tr>
+          <td>Mei</td>
+          <td>5036</td>
+          <td>9505</td>
+        </tr>
+        <tr>
+          <td>Juni</td>
+          <td>4547</td>
+          <td>5026</td>
+        </tr>
+        <tr>
+          <td>Juli</td>
+          <td>3467</td>
+          <td>6108</td>
+        </tr>
+        <tr>
+          <td>Agustus</td>
+          <td>3970</td>
+          <td>6343</td>
+        </tr>
+        <tr>
+          <td>September</td>
+          <td>6313</td>
+          <td>9404</td>
+        </tr>
+        <tr>
+          <td>Oktober</td>
+          <td>3595</td>
+          <td>9280</td>
+        </tr>
+        <tr>
+          <td>November</td>
+          <td>9207</td>
+          <td>9287</td>
+        </tr>
+        <tr>
+          <td>Desember</td>
+          <td>5945</td>
+          <td>8689</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <canvas id="yearlyChart" width="800" height="400"></canvas>
+
+    <script>
+      const canvas = document.getElementById("yearlyChart");
+      const ctx = canvas.getContext("2d");
+
+      // Data
+      const labels = [
+        "Januari",
+        "Februari",
+        "Maret",
+        "April",
+        "Mei",
+        "Juni",
+        "Juli",
+        "Agustus",
+        "September",
+        "Oktober",
+        "November",
+        "Desember",
+      ];
+      const data2022 = [
+        4017, 6135, 7091, 5841, 5036, 4547, 3467, 3970, 6313, 3595, 9207, 5945,
+      ];
+      const data2023 = [
+        2416, 4136, 7935, 8004, 9505, 5026, 6108, 6343, 9404, 9280, 9287, 8689,
+      ];
+
+      // Grafik
+      const barWidth = 40;
+      const gap = 20;
+      const startX = 50;
+      const chartHeight = 300;
+
+      // Skala
+      const maxData = Math.max(...data2022, ...data2023);
+      const scale = chartHeight / maxData;
+
+      // Gambar Grafik
+      function drawBar(x, y, height, color) {
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, barWidth, height);
+      }
+
+      function drawChart() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Sumbu Y
+        ctx.beginPath();
+        ctx.moveTo(startX, 0);
+        ctx.lineTo(startX, chartHeight);
+        ctx.stroke();
+
+        // Sumbu X dan Label
+        labels.forEach((label, i) => {
+          const x = startX + i * (2 * barWidth + gap) + barWidth / 2;
+          ctx.fillStyle = "#000";
+          ctx.fillText(label, x, chartHeight + 15);
+        });
+
+        // Bar
+        labels.forEach((_, i) => {
+          const x2022 = startX + i * (2 * barWidth + gap);
+          const x2023 = x2022 + barWidth;
+
+          drawBar(
+            x2022,
+            chartHeight - data2022[i] * scale,
+            data2022[i] * scale,
+            "blue"
+          );
+          drawBar(
+            x2023,
+            chartHeight - data2023[i] * scale,
+            data2023[i] * scale,
+            "red"
+          );
+        });
+
+        // Legenda
+        ctx.fillStyle = "blue";
+        ctx.fillRect(650, 50, 20, 10);
+        ctx.fillStyle = "black";
+        ctx.fillText("2022", 675, 60);
+        ctx.fillStyle = "red";
+        ctx.fillRect(650, 70, 20, 10);
+        ctx.fillStyle = "black";
+        ctx.fillText("2023", 675, 80);
+      }
+
+      drawChart();
+    </script>
+  </body>
+</html>
